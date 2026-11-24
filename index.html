@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portal de Matrícula Universitaria</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+
+    <!-- ===================================================== -->
+    <!-- Pantalla de acceso: inicio de sesión y registro        -->
+    <!-- ===================================================== -->
+    <div id="vistaAcceso" class="acceso d-none">
+      <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100 py-4 g-4">
+
+          <div class="col-lg-5 d-none d-lg-block">
+            <div class="acceso-marca">
+              <span class="brand-mark brand-mark-lg">
+                <i class="bi bi-mortarboard-fill"></i>
+              </span>
+              <h1 class="display-5 fw-bold mt-4 mb-3">
+                Portal de <span>Matrícula</span>
+              </h1>
+              <p class="lead mb-4">
+                Consulta la oferta académica, arma tu horario y confirma tu matrícula en línea.
+              </p>
+              <ul class="acceso-lista">
+                <li><i class="bi bi-check2-circle"></i> Cupos actualizados en tiempo real</li>
+                <li><i class="bi bi-check2-circle"></i> Validación de horarios y prerrequisitos</li>
+                <li><i class="bi bi-check2-circle"></i> Comprobante de matrícula (Forma 03)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-8 col-lg-5">
+            <div class="acceso-card">
+              <ul class="nav nav-pills nav-fill mb-4" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link active"
+                    id="tabLogin"
+                    data-bs-toggle="pill"
+                    data-bs-target="#panelLogin"
+                    type="button"
+                    role="tab"
+                  >
+                    Iniciar sesión
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="tabRegistro"
+                    data-bs-toggle="pill"
+                    data-bs-target="#panelRegistro"
+                    type="button"
+                    role="tab"
+                  >
+                    Crear cuenta
+                  </button>
+                </li>
+              </ul>
+
+              <div class="tab-content">
+
+                <!-- Formulario de inicio de sesión -->
+                <div class="tab-pane fade show active" id="panelLogin" role="tabpanel">
+                  <form id="formLogin" novalidate onsubmit="iniciarSesion(event)">
+                    <div class="mb-3">
+                      <label for="loginUsuario" class="form-label fw-semibold">
+                        Correo institucional o número de cuenta
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="loginUsuario"
+                        placeholder="usuario@unah.hn o 20211000123"
+                        autocomplete="username"
+                        required
+                      />
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="loginPassword" class="form-label fw-semibold">
+                        Contraseña
+                      </label>
+                      <div class="input-group">
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="loginPassword"
+                          autocomplete="current-password"
+                          required
+                        />
+                        <button
+                          class="btn btn-outline-secondary"
+                          type="button"
+                          title="Mostrar u ocultar contraseña"
+                          onclick="mostrarPassword('loginPassword', this)"
+                        >
+                          <i class="bi bi-eye"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div id="loginError" class="alert alert-danger d-none" role="alert"></div>
+
+                    <button
+                      type="submit"
+                      class="btn btn-primary w-100 btn-lg"
+                      id="btnLogin"
+                    >
+                      <i class="bi bi-box-arrow-in-right me-2"></i>
+                      Ingresar
+                    </button>
+                  </form>
+                </div>
+
+                <!-- Formulario de registro -->
+                <div class="tab-pane fade" id="panelRegistro" role="tabpanel">
+                  <form id="formRegistro" novalidate onsubmit="registrarse(event)">
+                    <div class="row g-3">
+                      <div class="col-sm-6">
+                        <label for="regNombre" class="form-label fw-semibold">Nombre</label>
+                        <input type="text" class="form-control" id="regNombre" maxlength="50" required />
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="regApellidos" class="form-label fw-semibold">Apellidos</label>
+                        <input type="text" class="form-control" id="regApellidos" maxlength="50" required />
+                      </div>
+                      <div class="col-12">
+                        <label for="regCorreo" class="form-label fw-semibold">Correo institucional</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="regCorreo"
+                          placeholder="nombre.apellido@unah.hn"
+                          autocomplete="email"
+                          required
+                        />
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="regCuenta" class="form-label fw-semibold">Número de cuenta</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="regCuenta"
+                          inputmode="numeric"
+                          maxlength="11"
+                          placeholder="11 dígitos"
+                          required
+                        />
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="regCarrera" class="form-label fw-semibold">Carrera</label>
+                        <select id="regCarrera" class="form-select" required>
+                          <option value="">Cargando...</option>
+                        </select>
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="regPassword" class="form-label fw-semibold">Contraseña</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="regPassword"
+                          autocomplete="new-password"
+                          required
+                        />
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="regPassword2" class="form-label fw-semibold">Confirmar contraseña</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="regPassword2"
+                          autocomplete="new-password"
+                          required
+                        />
+                      </div>
+                      <div class="col-12">
+                        <div class="form-text">
+                          Mínimo 8 caracteres, con letras y números.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="registroError" class="alert alert-danger d-none mt-3" role="alert"></div>
+
+                    <button
+                      type="submit"
+                      class="btn btn-primary w-100 btn-lg mt-3"
+                      id="btnRegistro"
+                    >
+                      <i class="bi bi-person-plus me-2"></i>
+                      Crear cuenta
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- Aplicación (después de iniciar sesión)                 -->
+    <!-- ===================================================== -->
+    <div id="vistaApp" class="d-none">
+
+      <!-- Barra de navegación -->
+      <nav class="navbar navbar-dark app-navbar sticky-top">
+        <div class="container-fluid px-3 px-lg-4 flex-nowrap">
+          <div class="d-flex align-items-center gap-2">
+            <button
+              class="btn btn-link text-white d-lg-none p-0 me-1"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#menuLateral"
+              aria-label="Abrir menú"
+            >
+              <i class="bi bi-list fs-3"></i>
+            </button>
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+              <span class="brand-mark">
+                <i class="bi bi-mortarboard-fill"></i>
+              </span>
+              <span>UNIVERSIDAD <span class="brand-light d-none d-md-inline">/ Portal Académico</span></span>
+            </a>
+          </div>
+
+          <div class="d-flex align-items-center gap-3">
+            <div class="text-end d-none d-sm-block lh-sm">
+              <div class="text-white fw-semibold small" id="navNombre">—</div>
+              <div class="text-white-50 small" id="navRol">—</div>
+            </div>
+            <button
+              class="btn btn-outline-light btn-sm"
+              type="button"
+              onclick="cerrarSesion()"
+            >
+              <i class="bi bi-box-arrow-right"></i>
+              <span class="d-none d-sm-inline ms-1">Cerrar sesión</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="app-layout">
+
+        <!-- Menú lateral (offcanvas en móvil) -->
+        <aside
+          class="offcanvas-lg offcanvas-start app-sidebar"
+          tabindex="-1"
+          id="menuLateral"
+        >
+          <div class="offcanvas-header d-lg-none">
+            <h5 class="offcanvas-title fw-bold">Menú</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="offcanvas"
+              data-bs-target="#menuLateral"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="offcanvas-body flex-column">
+            <div class="sidebar-titulo">MENÚ PRINCIPAL</div>
+            <nav class="nav flex-column gap-1" id="menuOpciones">
+              <!-- Las opciones se pintan desde JS según el rol -->
+            </nav>
+            <div class="sidebar-periodo mt-auto" id="sidebarPeriodo"></div>
+          </div>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="app-main">
+
+          <!-- Aviso de conexión perdida -->
+          <div id="alertaConexion" class="alert alert-danger d-none d-flex align-items-center justify-content-between gap-3" role="alert">
+            <span>
+              <i class="bi bi-wifi-off me-2"></i>
+              No se pudo conectar con el servidor. Verifique que el backend esté encendido.
+            </span>
+            <button class="btn btn-sm btn-danger" type="button" onclick="reintentarVista()">
+              <i class="bi bi-arrow-clockwise me-1"></i>
+              Reintentar
+            </button>
+          </div>
+
+          <!-- ================= ESTUDIANTE: INICIO ================= -->
+          <section id="vista-inicio-estudiante" class="vista d-none">
+            <div class="encabezado">
+              <h1 class="h2 fw-bold mb-1">Panel del estudiante</h1>
+              <p class="text-secondary mb-0">Consulta tu estado académico y gestiona tu matrícula.</p>
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon blue"><i class="bi bi-calendar3"></i></div>
+                  <div class="stat-label">Período actual</div>
+                  <div class="stat-number stat-texto" id="estPeriodo">—</div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon green"><i class="bi bi-journal-bookmark-fill"></i></div>
+                  <div class="stat-label">Créditos matriculados</div>
+                  <div class="stat-number" id="estCreditos">—</div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon orange"><i class="bi bi-patch-check-fill"></i></div>
+                  <div class="stat-label">Estado de matrícula</div>
+                  <div class="stat-number stat-texto" id="estEstado">—</div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon purple"><i class="bi bi-cart-check-fill"></i></div>
+                  <div class="stat-label">En mi selección</div>
+                  <div class="stat-number" id="estSeleccion">0</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-lg-8">
+                <div class="content-panel h-100">
+                  <h2 class="h5 fw-bold mb-3">Mis clases de la semana</h2>
+                  <div id="estClases"></div>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="content-panel mb-4">
+                  <h2 class="h5 fw-bold mb-3">Fechas importantes</h2>
+                  <div id="estFechas"></div>
+                </div>
+                <div class="content-panel">
+                  <h2 class="h5 fw-bold mb-3">Accesos rápidos</h2>
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-primary" type="button" onclick="mostrarVista('oferta')">
+                      <i class="bi bi-search me-2"></i>Ver oferta académica
+                    </button>
+                    <button class="btn btn-outline-primary" type="button" onclick="mostrarVista('mi-matricula')">
+                      <i class="bi bi-journal-check me-2"></i>Mi matrícula
+                    </button>
+                    <button class="btn btn-outline-primary" type="button" onclick="mostrarVista('comprobante')">
+                      <i class="bi bi-file-earmark-text me-2"></i>Comprobante
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= ESTUDIANTE: OFERTA ================= -->
+          <section id="vista-oferta" class="vista d-none">
+            <div class="encabezado">
+              <h1 class="h2 fw-bold mb-1">Oferta académica</h1>
+              <p class="text-secondary mb-0">Busca asignaturas disponibles y revisa sus requisitos antes de seleccionarlas.</p>
+            </div>
+
+            <div class="content-panel mb-3">
+              <form class="row g-2 align-items-center" onsubmit="buscarSecciones(event)">
+                <div class="col-lg-6">
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input
+                      type="search"
+                      id="ofertaBuscar"
+                      class="form-control"
+                      placeholder="Buscar asignatura o código..."
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-sm-7">
+                  <select id="ofertaCarrera" class="form-select" aria-label="Filtrar por carrera">
+                    <option value="">Todas las carreras</option>
+                  </select>
+                </div>
+                <div class="col-lg-3 col-sm-5 d-flex gap-2 align-items-center">
+                  <div class="form-check text-nowrap">
+                    <input class="form-check-input" type="checkbox" id="ofertaDisponibles" />
+                    <label class="form-check-label small" for="ofertaDisponibles">Con cupo</label>
+                  </div>
+                  <button class="btn btn-primary flex-grow-1" type="submit">Buscar</button>
+                </div>
+              </form>
+            </div>
+
+            <div id="ofertaAviso"></div>
+            <div id="ofertaLista" class="d-grid gap-3"></div>
+          </section>
+
+          <!-- ================= ESTUDIANTE: SELECCIÓN ================= -->
+          <section id="vista-seleccion" class="vista d-none">
+            <div class="encabezado">
+              <h1 class="h2 fw-bold mb-1">Selección provisional</h1>
+              <p class="text-secondary mb-0">Revisa las asignaturas elegidas antes de confirmar. Todavía no están matriculadas.</p>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-lg-8">
+                <div class="content-panel">
+                  <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                      <thead>
+                        <tr>
+                          <th>Asignatura</th>
+                          <th>Sección</th>
+                          <th>Horario</th>
+                          <th class="text-center">Créditos</th>
+                          <th class="text-center">Cupos</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody id="tablaSeleccion"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4">
+                <div class="content-panel">
+                  <h2 class="h5 fw-bold mb-3">Resumen</h2>
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span>Créditos (matriculados + selección)</span>
+                    <strong id="selCreditos">0 / 18</strong>
+                  </div>
+                  <div class="progress mb-3" role="progressbar" aria-label="Créditos acumulados">
+                    <div class="progress-bar" id="selBarra" style="width: 0%"></div>
+                  </div>
+                  <div id="selAdvertencias" class="mb-3"></div>
+                  <button
+                    class="btn btn-primary w-100"
+                    type="button"
+                    id="btnContinuarConfirmacion"
+                    onclick="abrirConfirmacion()"
+                  >
+                    <i class="bi bi-check2-square me-2"></i>
+                    Continuar a confirmación
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary w-100 mt-2"
+                    type="button"
+                    onclick="mostrarVista('oferta')"
+                  >
+                    Agregar más asignaturas
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= ESTUDIANTE: MI MATRÍCULA ================= -->
+          <section id="vista-mi-matricula" class="vista d-none">
+            <div class="encabezado d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2">
+              <div>
+                <h1 class="h2 fw-bold mb-1">Mi matrícula</h1>
+                <p class="text-secondary mb-0">Asignaturas confirmadas en el período actual.</p>
+              </div>
+              <button class="btn btn-outline-primary" type="button" onclick="mostrarVista('comprobante')">
+                <i class="bi bi-file-earmark-text me-2"></i>Ver comprobante
+              </button>
+            </div>
+
+            <div id="matriculaResumen" class="row g-3 mb-4"></div>
+
+            <div class="content-panel mb-4">
+              <h2 class="h5 fw-bold mb-3">Asignaturas vigentes</h2>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Asignatura</th>
+                      <th>Sección</th>
+                      <th>Horario</th>
+                      <th>Aula</th>
+                      <th>Docente</th>
+                      <th class="text-center">Créditos</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaMatricula"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="content-panel" id="panelRetiradas">
+              <h2 class="h5 fw-bold mb-3">Asignaturas retiradas</h2>
+              <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Asignatura</th>
+                      <th>Sección</th>
+                      <th class="text-center">Créditos</th>
+                      <th>Fecha de retiro</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaRetiradas"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= COMPROBANTE (estudiante y admin) ================= -->
+          <section id="vista-comprobante" class="vista d-none">
+            <div class="encabezado d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 no-print">
+              <div>
+                <h1 class="h2 fw-bold mb-1">Comprobante de matrícula</h1>
+                <p class="text-secondary mb-0">Refleja las asignaturas vigentes. Se actualiza después de cada cambio.</p>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary d-none" type="button" id="btnVolverComprobante" onclick="mostrarVista('matriculas')">
+                  <i class="bi bi-arrow-left me-1"></i>Volver
+                </button>
+                <button class="btn btn-primary" type="button" id="btnImprimir" onclick="imprimirComprobante()">
+                  <i class="bi bi-printer me-2"></i>Imprimir / Guardar PDF
+                </button>
+              </div>
+            </div>
+
+            <div id="comprobanteDocumento"></div>
+          </section>
+
+          <!-- ================= ESTUDIANTE: HISTORIAL ================= -->
+          <section id="vista-historial" class="vista d-none">
+            <div class="encabezado">
+              <h1 class="h2 fw-bold mb-1">Historial</h1>
+              <p class="text-secondary mb-0">Movimientos de matrícula y retiros registrados.</p>
+            </div>
+
+            <div class="content-panel mb-4">
+              <h2 class="h5 fw-bold mb-3">Movimientos</h2>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Movimiento</th>
+                      <th>Asignatura</th>
+                      <th>Sección</th>
+                      <th>Período</th>
+                      <th>Detalle</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaHistorial"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="content-panel">
+              <h2 class="h5 fw-bold mb-3">Matrículas por período</h2>
+              <div id="historialMatriculas"></div>
+            </div>
+          </section>
+
+          <!-- ================= ESTUDIANTE: PERFIL ================= -->
+          <section id="vista-perfil" class="vista d-none">
+            <div class="encabezado">
+              <h1 class="h2 fw-bold mb-1">Mi perfil</h1>
+              <p class="text-secondary mb-0">Los datos académicos solo pueden ser modificados por Registro.</p>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-lg-7">
+                <div class="content-panel">
+                  <h2 class="h5 fw-bold mb-3">Datos personales</h2>
+                  <dl class="row mb-4" id="perfilDatos"></dl>
+
+                  <form onsubmit="guardarPerfil(event)" class="row g-2 align-items-end">
+                    <div class="col-sm-8">
+                      <label for="perfilTelefono" class="form-label fw-semibold">Teléfono</label>
+                      <input
+                        type="tel"
+                        id="perfilTelefono"
+                        class="form-control"
+                        placeholder="9999-9999"
+                        maxlength="15"
+                      />
+                    </div>
+                    <div class="col-sm-4">
+                      <button class="btn btn-primary w-100" type="submit">Guardar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="col-lg-5">
+                <div class="content-panel mb-4">
+                  <h2 class="h5 fw-bold mb-3">Cambiar contraseña</h2>
+                  <form onsubmit="cambiarPassword(event)">
+                    <div class="mb-3">
+                      <label for="passActual" class="form-label fw-semibold">Contraseña actual</label>
+                      <input type="password" id="passActual" class="form-control" autocomplete="current-password" />
+                    </div>
+                    <div class="mb-3">
+                      <label for="passNueva" class="form-label fw-semibold">Nueva contraseña</label>
+                      <input type="password" id="passNueva" class="form-control" autocomplete="new-password" />
+                    </div>
+                    <button class="btn btn-outline-primary w-100" type="submit">Actualizar contraseña</button>
+                  </form>
+                </div>
+
+                <div class="content-panel" id="panelAprobadas">
+                  <h2 class="h5 fw-bold mb-3">Asignaturas aprobadas</h2>
+                  <div id="perfilAprobadas"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= ADMIN: INICIO ================= -->
+          <section id="vista-inicio-admin" class="vista d-none">
+            <div class="encabezado">
+              <h1 class="h2 fw-bold mb-1">Administración académica</h1>
+              <p class="text-secondary mb-0" id="adminPeriodoTexto">Resumen del período activo.</p>
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon blue"><i class="bi bi-people-fill"></i></div>
+                  <div class="stat-label">Estudiantes</div>
+                  <div class="stat-number" id="admEstudiantes">—</div>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon green"><i class="bi bi-book-fill"></i></div>
+                  <div class="stat-label">Asignaturas activas</div>
+                  <div class="stat-number" id="admAsignaturas">—</div>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon orange"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+                  <div class="stat-label">Secciones del período</div>
+                  <div class="stat-number" id="admSecciones">—</div>
+                </div>
+              </div>
+              <div class="col-6 col-xl-3">
+                <div class="stat-card">
+                  <div class="stat-icon purple"><i class="bi bi-journal-check"></i></div>
+                  <div class="stat-label">Matrículas activas</div>
+                  <div class="stat-number" id="admMatriculas">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+              <div class="col-lg-6">
+                <div class="content-panel h-100">
+                  <h2 class="h5 fw-bold mb-3">Asignaturas con mayor demanda</h2>
+                  <div id="admDemanda"></div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="content-panel h-100">
+                  <h2 class="h5 fw-bold mb-3">Secciones llenas</h2>
+                  <div id="admLlenas"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-panel">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Ocupación de secciones</h2>
+                <button class="btn btn-sm btn-outline-secondary" type="button" onclick="cargarInicioAdmin()">
+                  <i class="bi bi-arrow-clockwise me-1"></i>Actualizar
+                </button>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Asignatura</th>
+                      <th>Sección</th>
+                      <th>Docente</th>
+                      <th style="min-width: 180px">Ocupación</th>
+                      <th class="text-center">Disponibles</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaOcupacion"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= ADMIN: ASIGNATURAS ================= -->
+          <section id="vista-asignaturas" class="vista d-none">
+            <div class="encabezado d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2">
+              <div>
+                <h1 class="h2 fw-bold mb-1">Asignaturas</h1>
+                <p class="text-secondary mb-0">Crea, edita y activa o desactiva asignaturas.</p>
+              </div>
+              <button
+                class="btn btn-primary"
+                type="button"
+                onclick="abrirModalAsignatura()"
+              >
+                <i class="bi bi-plus-lg me-2"></i>Nueva asignatura
+              </button>
+            </div>
+
+            <div class="content-panel">
+              <div class="input-group mb-3">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input
+                  type="search"
+                  id="buscarAsignaturaAdmin"
+                  class="form-control"
+                  placeholder="Filtrar por código o nombre..."
+                  oninput="renderAsignaturasAdmin()"
+                />
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nombre</th>
+                      <th class="text-center">Créditos</th>
+                      <th>Carrera</th>
+                      <th>Prerrequisitos</th>
+                      <th>Estado</th>
+                      <th class="text-end">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaAsignaturas"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= ADMIN: SECCIONES ================= -->
+          <section id="vista-secciones" class="vista d-none">
+            <div class="encabezado d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2">
+              <div>
+                <h1 class="h2 fw-bold mb-1">Gestión de secciones</h1>
+                <p class="text-secondary mb-0">Asigna docente, horario, aula y cupo a cada sección.</p>
+              </div>
+              <button
+                class="btn btn-primary"
+                type="button"
+                onclick="abrirModalSeccion()"
+              >
+                <i class="bi bi-plus-lg me-2"></i>Nueva sección
+              </button>
+            </div>
+
+            <div class="content-panel">
+              <div class="row g-2 mb-3">
+                <div class="col-md-4">
+                  <select id="filtroPeriodoSecciones" class="form-select" aria-label="Período" onchange="cargarSeccionesAdmin()"></select>
+                </div>
+                <div class="col-md-8">
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input
+                      type="search"
+                      id="buscarSeccionAdmin"
+                      class="form-control"
+                      placeholder="Filtrar por asignatura, docente o sección..."
+                      oninput="renderSeccionesAdmin()"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Asignatura</th>
+                      <th>Sección</th>
+                      <th>Docente</th>
+                      <th>Horario</th>
+                      <th>Aula</th>
+                      <th class="text-center">Ocupación</th>
+                      <th>Estado</th>
+                      <th class="text-end">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaSecciones"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= ADMIN: PERÍODOS ================= -->
+          <section id="vista-periodos" class="vista d-none">
+            <div class="encabezado d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2">
+              <div>
+                <h1 class="h2 fw-bold mb-1">Períodos académicos</h1>
+                <p class="text-secondary mb-0">Solo puede haber un período abierto. Abrir uno cierra el anterior.</p>
+              </div>
+              <button
+                class="btn btn-primary"
+                type="button"
+                onclick="abrirModalPeriodo()"
+              >
+                <i class="bi bi-plus-lg me-2"></i>Nuevo período
+              </button>
+            </div>
+
+            <div class="content-panel">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Período</th>
+                      <th>Clases</th>
+                      <th>Matrícula</th>
+                      <th>Límite de retiro</th>
+                      <th>Estado</th>
+                      <th class="text-end">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaPeriodos"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= ADMIN: ESTUDIANTES ================= -->
+          <section id="vista-estudiantes" class="vista d-none">
+            <div class="encabezado">
+              <h1 class="h2 fw-bold mb-1">Estudiantes</h1>
+              <p class="text-secondary mb-0">Estudiantes registrados y créditos matriculados en el período activo.</p>
+            </div>
+
+            <div class="content-panel">
+              <form class="input-group mb-3" onsubmit="cargarEstudiantesAdmin(event)">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input
+                  type="search"
+                  id="buscarEstudiante"
+                  class="form-control"
+                  placeholder="Buscar por nombre, correo o número de cuenta..."
+                />
+                <button class="btn btn-primary" type="submit">Buscar</button>
+              </form>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Cuenta</th>
+                      <th>Nombre</th>
+                      <th>Correo</th>
+                      <th>Carrera</th>
+                      <th class="text-center">Créditos</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaEstudiantes"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= ADMIN: MATRÍCULAS ================= -->
+          <section id="vista-matriculas" class="vista d-none">
+            <div class="encabezado">
+              <h1 class="h2 fw-bold mb-1">Matrículas</h1>
+              <p class="text-secondary mb-0">Matrículas registradas en el período seleccionado.</p>
+            </div>
+
+            <div class="content-panel">
+              <div class="row g-2 mb-3">
+                <div class="col-md-4">
+                  <select id="filtroPeriodoMatriculas" class="form-select" aria-label="Período" onchange="cargarMatriculasAdmin()"></select>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Estudiante</th>
+                      <th>Asignaturas vigentes</th>
+                      <th class="text-center">Créditos</th>
+                      <th>Estado</th>
+                      <th>Fecha</th>
+                      <th class="text-end">Comprobante</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaMatriculasAdmin"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+        </main>
+      </div>
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- Modales                                               -->
+    <!-- ===================================================== -->
+
+    <!-- Modal de confirmación genérico -->
+    <div class="modal fade" id="modalConfirmar" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-0 pb-0">
+            <h2 class="modal-title h5 fw-bold" id="confirmarTitulo">Confirmar</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <div id="confirmarMensaje"></div>
+            <div id="confirmarMotivoGrupo" class="mt-3 d-none">
+              <label for="confirmarMotivo" class="form-label fw-semibold">Motivo (opcional)</label>
+              <textarea id="confirmarMotivo" class="form-control" rows="2" maxlength="200"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="confirmarBoton">Confirmar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Asignatura -->
+    <div class="modal fade" id="modalAsignatura" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <form onsubmit="guardarAsignatura(event)" novalidate>
+            <div class="modal-header border-0 pb-0">
+              <div>
+                <div class="section-kicker">CATÁLOGO</div>
+                <h2 class="modal-title h4 fw-bold" id="tituloModalAsignatura">Nueva asignatura</h2>
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body pt-3">
+              <div class="row g-3">
+                <div class="col-sm-4">
+                  <label for="asigCodigo" class="form-label fw-semibold">Código</label>
+                  <input type="text" id="asigCodigo" class="form-control text-uppercase" placeholder="IS-410" maxlength="10" required />
+                </div>
+                <div class="col-sm-8">
+                  <label for="asigNombre" class="form-label fw-semibold">Nombre</label>
+                  <input type="text" id="asigNombre" class="form-control" maxlength="80" required />
+                </div>
+                <div class="col-sm-4">
+                  <label for="asigCreditos" class="form-label fw-semibold">Créditos</label>
+                  <input type="number" id="asigCreditos" class="form-control" min="1" max="6" required />
+                </div>
+                <div class="col-sm-8">
+                  <label for="asigCarrera" class="form-label fw-semibold">Carrera</label>
+                  <select id="asigCarrera" class="form-select" required></select>
+                </div>
+                <div class="col-12">
+                  <label for="asigDescripcion" class="form-label fw-semibold">Descripción</label>
+                  <textarea id="asigDescripcion" class="form-control" rows="2" maxlength="300"></textarea>
+                </div>
+                <div class="col-12">
+                  <label for="asigPrerrequisitos" class="form-label fw-semibold">Prerrequisitos</label>
+                  <select id="asigPrerrequisitos" class="form-select" multiple size="5"></select>
+                  <div class="form-text">Mantén presionada la tecla Ctrl (o Cmd) para seleccionar varias.</div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar asignatura</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Sección -->
+    <div class="modal fade" id="modalSeccion" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <form onsubmit="guardarSeccion(event)" novalidate>
+            <div class="modal-header border-0 pb-0">
+              <div>
+                <div class="section-kicker">OFERTA</div>
+                <h2 class="modal-title h4 fw-bold" id="tituloModalSeccion">Nueva sección</h2>
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body pt-3">
+              <div class="row g-3">
+                <div class="col-sm-8">
+                  <label for="secAsignatura" class="form-label fw-semibold">Asignatura</label>
+                  <select id="secAsignatura" class="form-select" required></select>
+                </div>
+                <div class="col-sm-4">
+                  <label for="secPeriodo" class="form-label fw-semibold">Período</label>
+                  <select id="secPeriodo" class="form-select" required></select>
+                </div>
+                <div class="col-sm-4">
+                  <label for="secCodigo" class="form-label fw-semibold">Sección</label>
+                  <input type="text" id="secCodigo" class="form-control" placeholder="0800" maxlength="4" inputmode="numeric" required />
+                </div>
+                <div class="col-sm-8">
+                  <label for="secDocente" class="form-label fw-semibold">Docente</label>
+                  <input type="text" id="secDocente" class="form-control" maxlength="80" required />
+                </div>
+                <div class="col-sm-6">
+                  <label for="secAula" class="form-label fw-semibold">Aula</label>
+                  <input type="text" id="secAula" class="form-control" placeholder="LAB-1" maxlength="30" required />
+                </div>
+                <div class="col-sm-6">
+                  <label for="secCupo" class="form-label fw-semibold">Cupo máximo</label>
+                  <input type="number" id="secCupo" class="form-control" min="1" max="200" required />
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold d-block">Días de clase</label>
+                  <div class="d-flex flex-wrap gap-3" id="secDias">
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="LU" id="diaLU" /><label class="form-check-label" for="diaLU">Lunes</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="MA" id="diaMA" /><label class="form-check-label" for="diaMA">Martes</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="MI" id="diaMI" /><label class="form-check-label" for="diaMI">Miércoles</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="JU" id="diaJU" /><label class="form-check-label" for="diaJU">Jueves</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="VI" id="diaVI" /><label class="form-check-label" for="diaVI">Viernes</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" value="SA" id="diaSA" /><label class="form-check-label" for="diaSA">Sábado</label></div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <label for="secInicio" class="form-label fw-semibold">Hora de inicio</label>
+                  <input type="time" id="secInicio" class="form-control" required />
+                </div>
+                <div class="col-sm-6">
+                  <label for="secFin" class="form-label fw-semibold">Hora de fin</label>
+                  <input type="time" id="secFin" class="form-control" required />
+                </div>
+                <div class="col-12">
+                  <div class="form-text" id="secAvisoMatriculados"></div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar sección</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Período -->
+    <div class="modal fade" id="modalPeriodo" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <form onsubmit="guardarPeriodo(event)" novalidate>
+            <div class="modal-header border-0 pb-0">
+              <div>
+                <div class="section-kicker">CALENDARIO</div>
+                <h2 class="modal-title h4 fw-bold" id="tituloModalPeriodo">Nuevo período</h2>
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body pt-3">
+              <div class="row g-3">
+                <div class="col-sm-8">
+                  <label for="perNombre" class="form-label fw-semibold">Nombre</label>
+                  <input type="text" id="perNombre" class="form-control" placeholder="I Período 2027" maxlength="40" required />
+                </div>
+                <div class="col-sm-4">
+                  <label for="perCodigo" class="form-label fw-semibold">Código</label>
+                  <input type="text" id="perCodigo" class="form-control text-uppercase" placeholder="2027-I" maxlength="15" required />
+                </div>
+                <div class="col-sm-6">
+                  <label for="perInicio" class="form-label fw-semibold">Inicio de clases</label>
+                  <input type="date" id="perInicio" class="form-control" required />
+                </div>
+                <div class="col-sm-6">
+                  <label for="perFin" class="form-label fw-semibold">Fin de clases</label>
+                  <input type="date" id="perFin" class="form-control" required />
+                </div>
+                <div class="col-sm-6">
+                  <label for="perMatInicio" class="form-label fw-semibold">Apertura de matrícula</label>
+                  <input type="datetime-local" id="perMatInicio" class="form-control" required />
+                </div>
+                <div class="col-sm-6">
+                  <label for="perMatFin" class="form-label fw-semibold">Cierre de matrícula</label>
+                  <input type="datetime-local" id="perMatFin" class="form-control" required />
+                </div>
+                <div class="col-sm-6">
+                  <label for="perRetiro" class="form-label fw-semibold">Fecha límite de retiro</label>
+                  <input type="datetime-local" id="perRetiro" class="form-control" required />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar período</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado de carga -->
+    <div id="cargando" class="cargando d-none" aria-live="polite">
+      <div class="cargando-caja">
+        <div class="spinner-border text-primary" role="status"></div>
+        <span class="ms-2">Consultando la API...</span>
+      </div>
+    </div>
+
+    <!-- Toasts -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div
+        id="appToast"
+        class="toast border-0 shadow"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="toastMensaje">Mensaje</div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Cerrar"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/utilidades.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/estudiante.js"></script>
+    <script src="js/admin.js"></script>
+  </body>
+</html>
